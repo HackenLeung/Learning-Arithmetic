@@ -41,7 +41,7 @@ var isPalindrome = function(x) {
         let cur = 0;
         let num = x;
         while(num != 0) {
-            cur = cur * 10 + num % 10; // 反转后的整数 + 尾数
+            cur = cur * 10 + num % 10; // 反转后的整数 + 尾数  3 32 321
             num = parseInt(num / 10); // 取整
         }
         return cur == x;
