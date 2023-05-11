@@ -13,8 +13,7 @@
 // 输出：[]
 
 // 示例 3：
-// 输入：digits = "2"
-// 输出：["a","b","c"]
+// 输入：digits = "2" 
 
 // 提示：
 // 0 <= digits.length <= 4
@@ -25,10 +24,9 @@
  * @return {string[]}
  */
 var letterCombinations = function(digits) {
-    if(!digits) return []
-    if(digits.length <=1) return digits.split('');
-    let res = [];
+    if(digits.length <=0) return []
     let letter = {
+        1:'',
         2:'abc',
         3:'def',
         4:'ghi',
@@ -38,24 +36,54 @@ var letterCombinations = function(digits) {
         8:'tuv',
         9:'wxyz'
     }
-    let index = 0;
-    let item = digits[index]; // 2
-    let str = letter[item][i]
-    while(index <= digits.length-1){
-        let i = 0;
-        while(i<=letter[item].length-1){
-            let nextItem = digits[index+1]; // 3
-            if(!nextItem) break;
-            str+=letter[nextItem][i]
-            i++
-            if(str.length>=digits.length-1) {
-                res.push(str);
-                str = letter[item][0]
-            }
-        }
-        index++
+    let arr = [];
+    var backtrack = (string,index) =>{
+        if(index === digits.length) arr.push(string);
+        else letter[digits[index]].split('').map(item=> backtrack(string+item,index+1))
     }
-    console.log(res,'ssss');
+    backtrack('', 0)
+    // 返回结果
+    return arr
 };
+console.log(letterCombinations(''),'ss');
 
-console.log(letterCombinations('23'));
+function letterCombinations2(digits) {
+    // 如果没有数字直接返回
+    if (digits.length == 0) return []
+    // 电话号码对应的字母表示(mark[number-1]，例子：电话号码2，对应mark[2-1]=['a', 'b', 'c'])
+    const mark = [
+        [''],
+        ['a', 'b', 'c'],
+        ['d', 'e', 'f'],
+        ['g', 'h', 'i'],
+        ['j', 'k', 'l'],
+        ['m', 'n', 'o'],
+        ['p', 'q', 'r', 's'],
+        ['t', 'u', 'v'],
+        ['w', 'x', 'y', 'z']
+    ]
+    // 记录电话号码字母组合数组
+    var recordArray = []
+    /**
+     * @description: 回溯函数
+     * @author: JunLiangWang
+     * @param {*} cuString  上一次字母组合字符串
+     * @param {*} index     当前遍历到的digits索引
+     * @return {*}
+     */
+    var backtrack = function (cuString, index) {
+        // 如果遍历完成digits所有字符，则向记录数组添加上一次字母组合的字符串
+        if (index == digits.length) recordArray.push(cuString)
+        // 如果没有，则找出当前电话号码对应的字母进行遍历(mark[number-1]，
+        // 例子：电话号码2，对应mark[2-1]=['a', 'b', 'c'])，并继续调用
+        // 回溯函数(参数1：上一次字母组合的字符串+这次对应的字母，参数2：索引+1)
+        // 直到遍历完成digits为止
+        else mark[digits[index] - 1].map((word) => backtrack(cuString + word, index + 1))
+    }
+    // 调用回溯函数
+    backtrack('', 0)
+    // 返回结果
+    return recordArray
+}
+
+// console.log(letterCombinations2('234'));
